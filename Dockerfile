@@ -37,3 +37,8 @@ RUN sdkmanager "platform-tools" > /dev/null && \
     sdkmanager "extras;google;google_play_services" > /dev/null && \
     sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" > /dev/null && \
     sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1" > /dev/null
+
+# Install 27 build
+RUN yes |sdkmanager "platforms;android-27" > /dev/null && \        
+    yes |sdkmanager "build-tools;27.0.3" > /dev/null
+    
