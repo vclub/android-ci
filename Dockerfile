@@ -21,9 +21,16 @@ ADD http://dl.google.com/android/repository/sdk-tools-linux-4333796.zip /tools.z
 RUN unzip -q /tools.zip -d /sdk && \
     rm -v /tools.zip
 
+# Download gradle 4.4
+ADD https://services.gradle.org/distributions/gradle-4.4-all.zip /gradle.zip
+RUN unzip -q /gradle.zip -d /opt/gradle/ && \
+    rm -v /gradle.zip
+ENV GRADLE_HOME /opt/gradle
+ENV GRADLE_VERSION 4.4
+
 # Configure PATH
 ENV ANDROID_HOME "/sdk"
-ENV PATH "${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools"
+ENV PATH "${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:/opt/gradle/gradle-4.4/bin"
 
 # Accept License
 RUN mkdir -p $ANDROID_HOME/licenses/ && \
@@ -37,3 +44,8 @@ RUN sdkmanager "platform-tools" > /dev/null && \
     sdkmanager "extras;google;google_play_services" > /dev/null && \
     sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" > /dev/null && \
     sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1" > /dev/null
+
+# Install 27 build
+RUN yes |sdkmanager "platforms;android-27" > /dev/null && \        
+    yes |sdkmanager "build-tools;27.0.3" > /dev/null
+    
