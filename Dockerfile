@@ -13,6 +13,10 @@ RUN apt-get -qq update && \
     apt-get install -qqy --no-install-recommends curl html2text openjdk-8-jdk libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 unzip && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.UTF-8
+
 RUN rm -f /etc/ssl/certs/java/cacerts; \
     /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
@@ -46,6 +50,5 @@ RUN sdkmanager "platform-tools" > /dev/null && \
     sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1" > /dev/null
 
 # Install 27 build
-RUN yes |sdkmanager "platforms;android-27" > /dev/null && \        
+RUN yes |sdkmanager "platforms;android-27" > /dev/null && \
     yes |sdkmanager "build-tools;27.0.3" > /dev/null
-    
