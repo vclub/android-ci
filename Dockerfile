@@ -9,7 +9,7 @@ FROM ubuntu:18.04
 LABEL key="Bin Li <bin.lee.1980@gmail.com>"
 
 ENV SDK_URL "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip"
-ENV VERSION_BUILD_TOOLS "28.0.2"
+ENV VERSION_BUILD_TOOLS "28.0.3"
 ENV VERSION_TARGET_SDK "28"
 
 # Prepare System
