@@ -5,17 +5,17 @@
 # https://gitlab.com/hardysim/android-ci
 #
 
-FROM ubuntu:18.04
+FROM openjdk:11-jdk
 LABEL key="Bin Li <bin.lee.1980@gmail.com>"
 
-ENV SDK_URL "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip"
-ENV VERSION_BUILD_TOOLS "28.0.3"
-ENV VERSION_TARGET_SDK "28"
+ENV SDK_URL "https://dl.google.com/android/repository/sdk-tools-linux-7583922.zip"
+ENV VERSION_BUILD_TOOLS "30.0.3"
+ENV VERSION_TARGET_SDK "30"
 
 # Prepare System
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get -qq update && \
-    apt-get install -qqy --no-install-recommends curl html2text openjdk-8-jdk libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5 lib32z1 unzip && \
+RUN apt-get --quiet update --yes && \
+    apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN rm -f /etc/ssl/certs/java/cacerts; \
@@ -45,14 +45,10 @@ RUN mkdir -p $ANDROID_HOME/licenses/ && \
     echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > $ANDROID_HOME/licenses/android-sdk-preview-license
 
 # Install SDK Package
-RUN sdkmanager "platform-tools" > /dev/null && \
+RUN yes | sdkmanager --licenses || true
+    sdkmanager "platform-tools" > /dev/null && \
     sdkmanager "platforms;android-${VERSION_TARGET_SDK}" > /dev/null && \
-    sdkmanager "build-tools;${VERSION_BUILD_TOOLS}" > /dev/null && \
-    sdkmanager "extras;android;m2repository" > /dev/null && \
-    sdkmanager "extras;google;m2repository" > /dev/null && \
-    sdkmanager "extras;google;google_play_services" > /dev/null && \
-    sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.2" > /dev/null && \
-    sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.0.1" > /dev/null
+    sdkmanager "build-tools;${VERSION_BUILD_TOOLS}" > /dev/null 
 
 # Download Gradle
 # ENV GRADLE_VERSION 4.4
